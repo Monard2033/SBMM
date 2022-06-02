@@ -1,0 +1,35 @@
+void setup()
+{
+  setare_seriala();
+}
+
+void setare_seriala()
+{
+  UCSR0A=0;
+  UCSR0A=0;
+  UCSR0A=0;
+  UBRR0=103;// viteza 9600 biti/sec
+  UCSR0B=(1<<RXEN0)|(1<<TXEN0);//activare recepție și transmisie
+  UCSR0C=(1<<UCSZ00)|(1<<UCSZ01);// 2 biți stop, 8 biți date
+  
+}
+
+void transmisie_date (unsigned char date_detrimis)
+{
+while (!(UCSR0A&(1<<UDRE0))) ; 
+UDR0=date_detrimis; //transmite datele
+}
+
+
+unsigned char receptie_date(void)
+{
+while (!(UCSR0A&(1<<RXC0))); //așteaptă un numar receptionat in UDR0
+return UDR0; //furnizează ca rezultat octetul primit
+}
+
+void loop()
+{
+  transmisie_date(7);
+  delay(5);
+ 
+}
